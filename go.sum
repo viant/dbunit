@@ -968,8 +968,8 @@ github.com/viant/sqlparser v0.13.1-0.20261005175605-18369aade19d h1:kfh1dLS7/gTh
 github.com/viant/sqlparser v0.13.1-0.20261005175605-18369aade19d/go.mod h1:2QRGiGZYk2/pjhORGG1zLVQ9JO+bXFhqIVi31mkCRPg=
 github.com/viant/sqlx v0.26.1-0.20261020143731-b6b291346945 h1:5RmIf8HyfiNUeQvJBJiliz+IsaevegiphNf3MVsWKOQ=
 github.com/viant/sqlx v0.26.1-0.20261020143731-b6b291346945/go.mod h1:/qyxibjy9VpDiYZwHVwSNHnPXI4476LqYtDty8V0Rg4=
-github.com/viant/structology v0.10.1-0.20261020143631-cc56e18cdc7a h1:HpawRVelo9B6nySQvNbE/O98YXmeSF4j1A5lpJXsY8g=
-github.com/viant/structology v0.10.1-0.20261020143631-cc56e18cdc7a/go.mod h1:sNNuCH9Zt+QUNeV1slf/QKBdOdUIj0AVdhDFR09+8Ig=
+github.com/viant/structology v0.10.1-0.20261020182740-3fac6f36235c h1:eM4TdV+vbpnsSalfAr2CgMzhRoF0lC5J7/t2MpLicAw=
+github.com/viant/structology v0.10.1-0.20261020182740-3fac6f36235c/go.mod h1:sNNuCH9Zt+QUNeV1slf/QKBdOdUIj0AVdhDFR09+8Ig=
 github.com/viant/tagly v0.3.1-0.20260914020630-eadee36c3630 h1:H+mvmT2GxVZBmGxdxtMEylekTqDZoCEwNKqOynOfVik=
 github.com/viant/tagly v0.3.1-0.20260914020630-eadee36c3630/go.mod h1:PauQQkHmAvL5lFGr4gIgi+PE0aUPggBIBYN34sX2Oes=
 github.com/viant/toolbox v0.24.0/go.mod h1:OxMCG57V0PXuIP2HNQrtJf2CjqdmbrOx5EkMILuUhzM=

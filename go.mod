@@ -10,7 +10,7 @@ require (
 	github.com/viant/assertly v0.9.1-0.20220620174148-bab013f93a60
 	github.com/viant/sqlparser v0.13.1-0.20261005175605-18369aade19d
 	github.com/viant/sqlx v0.26.1-0.20261020143731-b6b291346945
-	github.com/viant/structology v0.10.1-0.20261020143631-cc56e18cdc7a
+	github.com/viant/structology v0.10.1-0.20261020182740-3fac6f36235c
 	github.com/viant/toolbox v0.39.0
 	gopkg.in/yaml.v3 v3.0.1
 	modernc.org/sqlite v1.21.2
