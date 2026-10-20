@@ -61,7 +61,7 @@ The inspected SQLX checkout declares Go 1.25.8. Choose dbunit's Go version from 
 | Sequences / generated IDs | Explicit identities, generated-key capture, dialect sequence operations | Core identities; dialect features phased |
 | Table/view mapping | Explicit reusable mapping graph, deterministic expansion | SQL parity phase |
 | Query | Bound SQL + optional capture and assertions | Core |
-| Freeze | Explicit query export with transformations and presence-aware serialization | SQL parity phase |
+| Export | Explicit query export with transformations and presence-aware serialization | SQL parity phase |
 | Dump DDL / vendor type mapping | Same-dialect extraction for e2e first; explicit cross-vendor mappings later | Initial release; conversion in SQL parity phase |
 | Compare databases | Two explicit queries with key/matching/normalization options | SQL parity phase |
 | Check schema | Normalized schema descriptors and structured differences | SQL parity phase |
@@ -264,7 +264,7 @@ AFS embed implementation requirements:
 3. Use a resolver-private AFS service/provider or direct bound manager operations. Private factories must retain the bound FS even when call options are absent.
 4. Validate paths with slash semantics and `fs.ValidPath`; reject traversal outside the declared root. Deal with `.` as the root explicitly.
 5. Two independent embedded filesystems containing the same path must work concurrently without content leakage.
-6. Embed is read-only. Freeze and dump require a separate writable destination; never try to upload into embedded assets.
+6. Embed is read-only. Export and dump require a separate writable destination; never try to upload into embedded assets.
 7. Cache keys include resolver identity plus path, format and content identity. Do not cache only by URL text.
 
 Directories and globs are convenience features only when explicitly requested. A directory manifest must map files to tables, or an explicit option must authorize filename-to-table mapping. Sort discovery deterministically, reject duplicate targets unless ordered multiple operations are explicitly declared, and fail when a required source matches zero files.
@@ -550,7 +550,7 @@ For large comparisons, prefer streaming ordered keys or bounded partitioning. Th
 
 Support named logical fixtures mapped to multiple physical tables. Explicit mappings define source paths, destination columns, required fields, defaults, keys and associations. Compile a deterministic dependency graph and reject cycles unless a supported deferred-constraint path exists. Use typed composite keys for deduplication. Conflicting values for the same mapped row are errors by default; do not silently accept whichever map iteration happened first.
 
-### Freeze and export
+### Fixture export
 
 Execute an explicit bound query, normalize values, then apply an ordered transformation list: ignore paths, overrides, replacements, timezone/layout handling, relative-date expressions, ASCII transformation and optional obfuscation. Export JSON/NDJSON first; CSV needs an explicit null/escaping policy. Preserve exact numbers and nested shape.
 
@@ -592,7 +592,7 @@ dbunit/
   internal/match/       # keys, ordered/multiset matching, normalization
   internal/dialect/     # capability descriptors and SQL policy
   internal/mapping/     # logical-to-physical dataset mapping
-  export/               # freeze, schema dump, schema/data comparison as needed
+  export/               # export, schema dump, schema/data comparison as needed
   examples/             # explicit files, embedded fixtures, nested BigQuery
   integration/          # isolated per-dialect tests, optional modules if needed
   testdata/             # manifests and fixtures referenced explicitly
@@ -650,7 +650,7 @@ Release baseline should certify SQLite, PostgreSQL and MySQL for ordinary SQL fi
 16. Mapping deduplication, conflict detection, dependency cycles and deterministic table order.
 17. Context cancellation during reading/loading, rows.Err, driver errors and resource cleanup.
 18. MaxOpenConns(1), temp tables, uncommitted schema visibility and metadata cache invalidation.
-19. Freeze round-trip, schema/data comparison, and every optional HTTP operation's route.
+19. Export round-trip, schema/data comparison, and every optional HTTP operation's route.
 20. No required external services for unit tests; live integration tests explicitly selected.
 
 Run `go test`, `go test -race`, focused fuzzing and required live dialect suites at relevant milestones. Use a correctly versioned workspace for local integration, then test `GOWORK=off` against the pinned module graph. The earlier dsunit root test run was blocked by local dependency setup; do not use an unverified legacy test pass as a release baseline.
@@ -721,7 +721,7 @@ Acceptance: native and batch paths are semantically equivalent where advertised;
 
 ### Phase 6: full SQL utility parity and migration
 
-- Upsert, table mappings, sequence policies, freeze/data export, advanced schema comparison/cross-vendor rendering and cross-DB data comparison. Basic same-dialect schema extraction is already required in Phase 4.
+- Upsert, table mappings, sequence policies, export/data export, advanced schema comparison/cross-vendor rendering and cross-DB data comparison. Basic same-dialect schema extraction is already required in Phase 4.
 - Fixture compatibility translator and capability inventory.
 - Port representative real dsunit SQL suites, including macro-heavy and nested cases.
 - Optional remote adapter only if required by migrating consumers.
@@ -825,7 +825,7 @@ Core dbunit owns preparation, validation, SQL execution, schema asset applicatio
 
 Create `endly/service/testing/dbunit`. Prefer composition of core DTOs in Endly requests; introduce extra fields only for Endly-specific connection/source selection. Avoid duplicating every field in a parallel contract. A small registration/request adapter is appropriate; a general service framework is unnecessary.
 
-Initial Endly actions: **register, init, script, sql, prepare, expect, query, dump**. Schema loading and extraction are first-release requirements (section 21). Preserve readable action names and add advanced mapping, sequence, freeze, compare and checkSchema actions when their core operations are implemented and required by migration. The existing `create` action is the actual legacy route name even though some documentation calls it recreate; compatibility tests must use observed routes.
+Initial Endly actions: **register, init, script, sql, prepare, expect, query, dump**. Schema loading and extraction are first-release requirements (section 21). Preserve readable action names and add advanced mapping, sequence, export, compare and checkSchema actions when their core operations are implemented and required by migration. The existing `create` action is the actual legacy route name even though some documentation calls it recreate; compatibility tests must use observed routes.
 
 This staging does not remove the SQL parity requirements in section 3. It prevents optional utility work from blocking the first useful integration, while keeping schema round-trip support in that first release.
 
@@ -1024,7 +1024,7 @@ This section records implementation progress; earlier design examples remain pro
 
 Implemented in the local checkouts:
 
-- `dbunit`: engine, explicit fixture resolvers (including AFS embed), strict JSON/YAML manifests, SQLX batch preparation, native-loader opt-in, dependency ordering, owned/caller/case-rollback transaction modes, query/expect/report APIs, Go test helper, freeze and cross-query comparison.
+- `dbunit`: engine, explicit fixture resolvers (including AFS embed), strict JSON/YAML manifests, SQLX batch preparation, native-loader opt-in, dependency ordering, owned/caller/case-rollback transaction modes, query/expect/report APIs, Go test helper, export and cross-query comparison.
 - `structology.Maps`: bidirectional dynamic structs with nested presence markers. SQL ownership remains outside structology.
 - `sqlx/io/schema`: native schema artifacts, completeness/omission reporting, explicit scoped extraction, SQL script parsing and schema application. Dialect-specific support is described in package documentation; live database certification is separate from query-mock tests.
 - Endly: separate `dbunit` service, session database ownership, explicit asset roots, deferred fixture/argument expansion, typed assertion errors, manager/CLI counts and MCP exposure. The legacy `dsunit` service remains available.

@@ -11,25 +11,25 @@ import (
 	"github.com/viant/structology"
 )
 
-// FreezeRequest captures an explicit bounded query as a reusable fixture.
+// ExportRequest captures an explicit bounded query as a reusable fixture.
 // Persist Content to an explicit destination chosen by the caller.
-type FreezeRequest struct {
+type ExportRequest struct {
 	Query  QueryRequest `json:"query"`
 	Format string       `json:"format,omitempty"`
 }
-type FrozenFixture struct {
+type ExportResult struct {
 	Format  string `json:"format"`
 	Content []byte `json:"content"`
 	Rows    int    `json:"rows"`
 }
 
-func (e *Engine) Freeze(ctx context.Context, req FreezeRequest, options ...RunOption) (*FrozenFixture, error) {
+func (e *Engine) Export(ctx context.Context, req ExportRequest, options ...RunOption) (*ExportResult, error) {
 	format := strings.ToLower(req.Format)
 	if format == "" {
 		format = "json"
 	}
 	if format != "json" && format != "ndjson" {
-		return nil, fmt.Errorf("freeze format must be json or ndjson")
+		return nil, fmt.Errorf("export format must be json or ndjson")
 	}
 	result, err := e.Query(ctx, req.Query, options...)
 	if err != nil {
@@ -51,7 +51,7 @@ func (e *Engine) Freeze(ctx context.Context, req FreezeRequest, options ...RunOp
 	if err != nil {
 		return nil, err
 	}
-	return &FrozenFixture{Format: format, Content: buffer.Bytes(), Rows: len(result.Rows)}, nil
+	return &ExportResult{Format: format, Content: buffer.Bytes(), Rows: len(result.Rows)}, nil
 }
 
 // CompareRequest compares two explicit query results, including named databases.

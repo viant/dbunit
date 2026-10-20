@@ -109,7 +109,7 @@ A mismatch returns a typed `*AssertionError` and a `Report` with counts and path
 
 `Exec` runs direct INSERT/UPDATE/DELETE/MERGE/REPLACE statements in one owned or caller transaction, expands bound arguments once, and rejects transaction-control/DDL statements before executing anything. Use `ApplySchema` for DDL. CTE-wrapped commands are currently rejected.
 
-`Freeze` returns JSON/NDJSON fixture bytes from an explicit query. The caller chooses where to save them. `Compare` compares two explicit bounded queries, including named databases registered with `WithDatabase`.
+`Export` returns JSON/NDJSON fixture bytes from an explicit query. The caller chooses where to save them. `Compare` compares two explicit bounded queries, including named databases registered with `WithDatabase`.
 
 ## Schema load and extraction
 

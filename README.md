@@ -31,7 +31,7 @@ It is the SQL-focused successor to [dsunit](https://github.com/viant/dsunit). As
 - Generate fixture sequences and UUIDs, resolve references, and capture generated values.
 - Project logical fixtures into related physical tables with dependency ordering and key-based deduplication.
 - Compare full tables, selected keys, or explicit queries with precise numeric comparison and assertion predicates.
-- Load and extract native schema, freeze query results as fixtures, and compare database queries.
+- Load and extract native schema, export query results as fixtures, and compare database queries.
 - Use caller-owned database handles and explicit transaction policies.
 - Integrate with Go tests and Endly workflows through the same core engine.
 
@@ -209,7 +209,7 @@ PostgreSQL native COPY currently restricts identifier shapes; use batch loading 
 
 - `ApplySchema`: apply explicit SQL files, statements, or extracted artifacts.
 - `ExtractSchema`: extract selected tables with dependency and completeness policies.
-- `Freeze`: return JSON/NDJSON fixtures from an explicit bounded query.
+- `Export`: return JSON/NDJSON fixtures from an explicit bounded query.
 - `Compare`: compare two explicit queries, including named databases.
 - `Exec`: execute direct DML statements with bound-argument expansion and transaction ownership.
 
