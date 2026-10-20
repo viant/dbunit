@@ -1,6 +1,7 @@
 package dbunit
 
 import (
+	"bytes"
 	"context"
 	"database/sql"
 	"fmt"
@@ -217,7 +218,7 @@ func cloneValue(v any) any {
 		}
 		return r
 	case []byte:
-		return append([]byte(nil), x...)
+		return bytes.Clone(x)
 	default:
 		return v
 	}

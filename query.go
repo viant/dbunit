@@ -1,6 +1,7 @@
 package dbunit
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -74,7 +75,7 @@ func (e *Engine) query(ctx context.Context, ex Executor, query string, args []an
 			if b, ok := v.([]byte); ok {
 				typ := strings.ToUpper(types[i].DatabaseTypeName())
 				if strings.Contains(typ, "BLOB") || strings.Contains(typ, "BINARY") || typ == "BYTEA" {
-					v = append([]byte(nil), b...)
+					v = bytes.Clone(b)
 				} else {
 					v = string(b)
 				}
