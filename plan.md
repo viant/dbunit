@@ -1032,7 +1032,7 @@ Implemented in the local checkouts:
 
 Verification includes executable SQLite integration tests, race tests for dbunit and structology, SQLX schema round trips, and focused Endly service/manager/CLI/MCP workflows. The README lists runnable local commands and the supported API shape.
 
-Release work still requires published dependency versions containing the new Maps/schema APIs, replacing local module replacements, and live database certification for advertised native loaders/dialects. Mocked metadata tests establish API and SQL behavior, not a live product compatibility guarantee. Advanced schema objects and legacy dsunit directives that are unsupported must continue to produce explicit errors/omissions rather than success claims.
+Release work still requires live database certification for advertised native loaders/dialects. Mocked metadata tests establish API and SQL behavior, not a live product compatibility guarantee. Advanced schema objects and legacy dsunit directives that are unsupported must continue to produce explicit errors/omissions rather than success claims.
 
 ### Final acceptance additions
 
@@ -1041,7 +1041,7 @@ Release work still requires published dependency versions containing the new Map
 - Live SQLX native-loader tests passed for PostgreSQL/MySQL presence/default/null/zero/text fidelity, owned rollback and caller transactions. The MySQL adapter now rejects server warnings instead of reporting silent coercion as success.
 - Core `Exec` owns explicit DML execution and argument expansion. Endly delegates to it; transaction and loader capabilities are explicit service options.
 - A local one-iteration Apple M4 Max SQLite batch benchmark measured about 269k rows/s for a uniform 10,000-row batch and 208k rows/s for alternating sparse shapes. These are development baselines, not portable guarantees or a comparison against dsunit.
-- BigQuery live certification and unsupported advanced schema/legacy directive coverage remain explicit limitations. Local replacements still require published dependency versions for standalone distribution.
+- BigQuery live certification and unsupported advanced schema/legacy directive coverage remain explicit limitations.
 
 Endly verification note: focused dbunit, legacy dsunit, manager, CLI, MCP and request-expansion suites pass. Full root-package tests still report `TestNewDefaultState` and `TestAbstractService_GetHostAndSSHPort`; both failures were reproduced using the original HEAD module graph. These were not introduced or hidden by the dbunit changes. The pre-existing change to `service/system/process/service_test.go` was preserved.
 
@@ -1056,7 +1056,7 @@ The hydration/mapping work is now represented by explicit APIs rather than impli
 - Endly routes delegate these operations and use explicit state selectors for composing generated sources and datasets. The existing AsTableRecords UDF remains unchanged.
 - README, fixture documentation, contribution guidance, changelog and runnable examples accompany the API. LICENSE and NOTICE retain dsunit's original text.
 
-Remaining restrictions: one mapping node per physical table; dependency/reference cycles fail; no implicit legacy slash/tag/caching compatibility; generated IDs are fixture plans until preparation succeeds. BigQuery live certification and dependency publication remain separate release work.
+Remaining restrictions: one mapping node per physical table; dependency/reference cycles fail; no implicit legacy slash/tag/caching compatibility; generated IDs are fixture plans until preparation succeeds. BigQuery live certification remains separate release work.
 
 ### Cross-database and parent/child acceptance
 

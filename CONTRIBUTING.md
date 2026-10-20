@@ -4,7 +4,7 @@ Contributions to dbunit are welcome. Open an issue or pull request with a reprod
 
 ## Development setup
 
-Use the Go version declared in `go.mod` or newer. This development checkout uses sibling replacements for Viant dependencies; clone those repositories next to `dbunit` and check out versions containing the APIs used here. See the README for the current release status.
+Use the Go version declared in `go.mod` or newer. Dependencies are pinned in `go.mod`; run `go mod download` to fetch them. See the README for the current release status.
 
 Run commands from the `dbunit` directory:
 

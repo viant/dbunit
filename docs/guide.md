@@ -119,17 +119,18 @@ Schema round trips are tested on SQLite and in isolated PostgreSQL 16 and MySQL 
 
 ## Endly
 
-The sibling Endly checkout contains a thin `dbunit` service using this engine. It keeps the legacy `dsunit` service available. Connections and explicit fixture roots are session-bound; preparation and expectations delegate to dbunit. See `endly/service/testing/dbunit/README.md` for the implemented action contracts.
+Endly contains a thin `dbunit` service using this engine. It keeps the legacy `dsunit` service available. Connections and explicit fixture roots are session-bound; preparation and expectations delegate to dbunit. See `endly/service/testing/dbunit/README.md` for the implemented action contracts.
 
 ## Local development
 
-This checkout uses sibling-module replacements for the new SQLX schema APIs and structology Maps adapter:
+Download the pinned dependencies and run the checks:
 
 ```sh
+go mod download
 GOWORK=off go test ./...
 GOWORK=off go test -race ./...
 CGO_ENABLED=0 GOWORK=off go test ./...
 GOWORK=off go test -run '^$' -bench BenchmarkPrepareBatch -benchmem
 ```
 
-Replace local module references with published versions containing those APIs before distributing the module independently. The detailed design and remaining certification work are in [plan.md](../plan.md).
+The detailed design and remaining certification work are in [plan.md](../plan.md).

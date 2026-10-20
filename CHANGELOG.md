@@ -14,4 +14,4 @@ Initial SQL-focused dbunit implementation:
 - Logical-to-physical table mappings with dependencies and conflict detection.
 - Go testing helpers and Endly workflow/MCP integration.
 
-This development version uses sibling dependency replacements. BigQuery live certification and advanced legacy dsunit compatibility remain outstanding; see `plan.md`.
+BigQuery live certification and advanced legacy dsunit compatibility remain outstanding; see `plan.md`.

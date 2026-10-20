@@ -39,19 +39,13 @@ It is the SQL-focused successor to [dsunit](https://github.com/viant/dsunit). As
 
 This repository is a **development version**; its API may evolve before a tagged release. Changes are tracked in [CHANGELOG.md](CHANGELOG.md). Use Go **1.25.8 or newer**, as declared in `go.mod`.
 
-The current module uses local replacements for sibling Viant repositories. Its SQLX schema/loader changes and structology adapter must be present in those checkouts. Until these dependencies are published and pinned, this is not a standalone `go get` release. See [the implementation plan](plan.md) for release prerequisites and remaining parity work.
+Install the module with:
 
-The expected checkout layout is:
-
-```text
-viant/
-  dbunit/
-  sqlx/
-  structology/
-  afs/
-  assertly/
-  toolbox/
+```sh
+go get github.com/viant/dbunit
 ```
+
+Dependencies are pinned in `go.mod`. See [the implementation plan](plan.md) for remaining parity work.
 
 From `dbunit`, build and test with:
 

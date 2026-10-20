@@ -9,8 +9,8 @@ require (
 	github.com/viant/afs v1.30.1-0.20260914155934-90e95d483861
 	github.com/viant/assertly v0.9.1-0.20220620174148-bab013f93a60
 	github.com/viant/sqlparser v0.13.1-0.20261005175605-18369aade19d
-	github.com/viant/sqlx v0.26.1-0.20261019190555-2b47eeb3f37f
-	github.com/viant/structology v0.10.1-0.20260915165514-89d421971772
+	github.com/viant/sqlx v0.26.1-0.20261020143731-b6b291346945
+	github.com/viant/structology v0.10.1-0.20261020143631-cc56e18cdc7a
 	github.com/viant/toolbox v0.39.0
 	gopkg.in/yaml.v3 v3.0.1
 	modernc.org/sqlite v1.21.2
@@ -47,13 +47,3 @@ require (
 	modernc.org/strutil v1.1.3 // indirect
 	modernc.org/token v1.1.0 // indirect
 )
-
-replace github.com/viant/sqlx => ../sqlx
-
-replace github.com/viant/structology => ../structology
-
-replace github.com/viant/afs => ../afs
-
-replace github.com/viant/assertly => ../assertly
-
-replace github.com/viant/toolbox => ../toolbox
