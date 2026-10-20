@@ -1,7 +1,6 @@
 package dbunit
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -75,7 +74,12 @@ func (e *Engine) query(ctx context.Context, ex Executor, query string, args []an
 			if b, ok := v.([]byte); ok {
 				typ := strings.ToUpper(types[i].DatabaseTypeName())
 				if strings.Contains(typ, "BLOB") || strings.Contains(typ, "BINARY") || typ == "BYTEA" {
-					v = bytes.Clone(b)
+					// A typed []byte, even nil, is a non-NULL driver value.
+					// Some drivers represent an empty BLOB as []byte(nil).
+					// SQL NULL scans as an untyped nil and never enters here.
+					content := make([]byte, len(b))
+					copy(content, b)
+					v = content
 				} else {
 					v = string(b)
 				}

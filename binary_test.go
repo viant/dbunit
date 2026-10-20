@@ -1,8 +1,11 @@
 package dbunit
 
 import (
+	"bytes"
 	"reflect"
 	"testing"
+
+	"github.com/viant/dbunit/fixture"
 )
 
 func TestCloneBinaryPreservesNullEmptyAndOwnership(t *testing.T) {
@@ -43,25 +46,44 @@ func TestPrepareBinaryPreservesSQLNullAndEmpty(t *testing.T) {
 		{description: "empty blob", input: []byte{}, expected: "blob"},
 		{description: "binary blob", input: []byte{0, 1, 255}, expected: "blob"},
 	} {
-		t.Run(tc.description, func(t *testing.T) {
-			db, engine := testDB(t, "CREATE TABLE records(id INTEGER PRIMARY KEY,payload BLOB)")
-			_, err := engine.Prepare(t.Context(), PrepareRequest{Datasets: []Dataset{{Table: Table("records"), Source: maps(map[string]any{"id": 1, "payload": tc.input})}}})
-			if err != nil {
-				t.Fatal(err)
-			}
-			var storage string
-			var actual any
-			if err := db.QueryRow("SELECT typeof(payload),payload FROM records").Scan(&storage, &actual); err != nil {
-				t.Fatal(err)
-			}
-			expected := tc.input
-			if tc.expected == "null" {
-				expected = nil
-			}
-			if storage != tc.expected || !reflect.DeepEqual(expected, actual) {
-				t.Fatalf("storage=%s payload=%#v, expected %s %#v", storage, actual, tc.expected, expected)
-			}
-		})
+		for _, kind := range []string{"maps", "typed"} {
+			t.Run(kind+"/"+tc.description, func(t *testing.T) {
+				db, engine := testDB(t, "CREATE TABLE records(id INTEGER PRIMARY KEY,payload BLOB)")
+				source := maps(map[string]any{"id": 1, "payload": tc.input})
+				if kind == "typed" {
+					type row struct {
+						ID      int    `json:"id"`
+						Payload []byte `json:"payload"`
+					}
+					payload, _ := tc.input.([]byte)
+					source = fixture.Typed([]row{{ID: 1, Payload: payload}})
+				}
+				_, err := engine.Prepare(t.Context(), PrepareRequest{Datasets: []Dataset{{Table: Table("records"), Source: source}}})
+				if err != nil {
+					t.Fatal(err)
+				}
+				var storage string
+				var actual any
+				if err := db.QueryRow("SELECT typeof(payload),payload FROM records").Scan(&storage, &actual); err != nil {
+					t.Fatal(err)
+				}
+				if storage != tc.expected {
+					t.Fatalf("storage=%s, expected %s", storage, tc.expected)
+				}
+				if tc.expected == "null" {
+					if actual != nil {
+						t.Fatalf("SQL NULL scanned as %#v", actual)
+					}
+				} else {
+					// SQLite's modernc driver may scan an empty BLOB as typed nil
+					// bytes. The SQL storage type above proves it is not NULL.
+					actualBytes, ok := actual.([]byte)
+					if !ok || !bytes.Equal(tc.input.([]byte), actualBytes) {
+						t.Fatalf("payload=%#v, expected %#v", actual, tc.input)
+					}
+				}
+			})
+		}
 	}
 }
 
