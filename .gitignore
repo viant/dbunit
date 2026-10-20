@@ -1,0 +1,7 @@
+# Local test and profiling outputs
+*.test
+*.prof
+coverage.out
+coverage.html
+.DS_Store
+.idea/
