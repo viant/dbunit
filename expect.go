@@ -249,54 +249,11 @@ func compareRows(spec Expectation, expected, actual structology.Maps, r *Report)
 		}
 		return
 	}
-	if len(expected) > 256 || len(actual) > 256 {
-		addMismatch(r, spec, "rows", "matchingLimit", "use keys or ordered matching for more than 256 rows", len(actual))
+	if len(expected) == 1 && len(actual) == 1 {
+		compareReport(r, spec, "rows[0]", expected[0], actual[0], ctx)
 		return
 	}
-	edges := make([][]int, len(expected))
-	var singleFailures []Mismatch
-	for i, row := range expected {
-		for j, got := range actual {
-			failures := compareValue(fmt.Sprintf("rows[%d]", i), row, got, spec.Match.StrictFields, ctx)
-			if len(expected) == 1 && len(actual) == 1 {
-				singleFailures = failures
-			}
-			if len(failures) == 0 {
-				edges[i] = append(edges[i], j)
-			}
-		}
-	}
-	owners := make([]int, len(actual))
-	for i := range owners {
-		owners[i] = -1
-	}
-	var augment func(int, []bool) bool
-	augment = func(i int, seen []bool) bool {
-		for _, j := range edges[i] {
-			if seen[j] {
-				continue
-			}
-			seen[j] = true
-			if owners[j] < 0 || augment(owners[j], seen) {
-				owners[j] = i
-				return true
-			}
-		}
-		return false
-	}
-	for i, row := range expected {
-		if augment(i, make([]bool, len(actual))) {
-			r.Passed++
-		} else {
-			if len(expected) == 1 && len(actual) == 1 {
-				for _, failure := range singleFailures {
-					addMismatch(r, spec, failure.Path, failure.Category, failure.Expected, failure.Actual)
-				}
-			} else {
-				addMismatch(r, spec, fmt.Sprintf("rows[%d]", i), "missingRow", row, nil)
-			}
-		}
-	}
+	matchUnorderedRows(spec, expected, actual, r, ctx)
 }
 func compareReport(r *Report, spec Expectation, path string, expected, actual any, ctx *assertly.Context) {
 	failures := compareValue(path, expected, actual, spec.Match.StrictFields, ctx)

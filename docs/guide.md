@@ -101,7 +101,7 @@ Live native-loader tests pass on PostgreSQL 16 and MySQL 8, covering omitted/def
 
 ## Expectations and diagnostics
 
-Use explicit table or query expectations and one of `Full`, `Keys`, or `Query` scope. Keyed matching, explicitly ordered matching and duplicate-sensitive unordered matching are available. Unordered matching is bounded to 256 rows; use keys or ordering for larger results. Queries have a default 10,000-row limit. Duplicate result column names require aliases.
+Use explicit table or query expectations and one of `Full`, `Keys`, or `Query` scope. Keyed matching, explicitly ordered matching and duplicate-sensitive unordered matching are available. Unordered matching has no separate row-count cutoff. Literal fields narrow candidate rows through indexes; overlapping predicates use one-to-one augmenting-path matching, preserving duplicate multiplicity. Predicates without selective literal fields can require more comparisons. Queries have a default 10,000-row limit. Duplicate result column names require aliases.
 
 Subset field comparison is the default; `StrictFields` also rejects extra fields. `Contains` allows extra rows. Empty key-scoped expectations require `AllowEmpty`; an empty full-table expectation asserts that the table is empty. Numeric comparison uses exact rational values rather than converting all integers to floating point. Existing `<ds:...>` assertion macros are supported; unsupported `@` directives fail explicitly.
 

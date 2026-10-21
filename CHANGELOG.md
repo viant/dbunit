@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Remove the 256-row unordered-matching cutoff; index literal candidates and match overlapping predicates lazily while preserving duplicates and single evaluation of each compared pair.
+
 Initial SQL-focused dbunit implementation:
 
 - Explicit inline, file, filesystem, AFS, and embedded fixtures.
